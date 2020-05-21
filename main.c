@@ -12,6 +12,7 @@ int main(int c,char**v){
 					   -0.75,-0.75,0.5,0.5)
   }; 
   int a = 1;
+  int b = 2;
   window->connect_Mesh(window, meshes, 2);
   window->connect_Mesh(window, meshes2, 1);
   window->render(window);
