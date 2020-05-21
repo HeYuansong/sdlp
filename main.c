@@ -9,8 +9,9 @@ int main(int c,char**v){
   };
   Mesh * meshes2[1] = {
      interface_Box(interface_shader("shader/tri.vs","shader/tri.fs"),
-					   -0.75,-0.75,0.5,0.25)
-  };
+					   -0.75,-0.75,0.5,0.5)
+  }; 
+  int a = 1;
   window->connect_Mesh(window, meshes, 2);
   window->connect_Mesh(window, meshes2, 1);
   window->render(window);
