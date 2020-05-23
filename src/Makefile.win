@@ -1,5 +1,5 @@
 CC = gcc
-LIBSDIR = C:/Users/18742/Documents/sdlp/box/libs
+LIBSDIR = ../libs/windows
 CFLAGS = -g -Wall -mwindows
 INC = -I $(LIBSDIR)/SDL2/include -I ../include -I $(LIBSDIR)/GLEW/include
 

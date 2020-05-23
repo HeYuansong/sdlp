@@ -32,24 +32,24 @@ static void event(Window * window){
     switch(event.type){
     case SDL_WINDOWEVENT_CLOSE:{
       if(window->instance){
-      	SDL_DestroyWindow(window->instance);
-      	window->instance = NULL;
+	SDL_DestroyWindow(window->instance);
+	window->instance = NULL;
       }
       break;
     }
     case SDL_KEYDOWN:{
       switch(event.key.keysym.sym){
-        case SDLK_ESCAPE:{
-	        window->exit_state = 0;
-	        break;
-        }
+      case SDLK_ESCAPE:{
+	window->exit_state = 0;
+	break;
+      }
       }
       break;
     }
     case SDL_QUIT:{
-        window->exit_state = 0;
-        break;
-      }
+      window->exit_state = 0;
+      break;
+    }
     }
   }
 }
