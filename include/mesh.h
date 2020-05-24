@@ -1,6 +1,5 @@
 #include <head.h>
-#include <stdio.h>
-#include <string.h>
+
 #ifndef _MESH_
 #define _MESH_
 typedef char string[1024];

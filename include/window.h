@@ -1,7 +1,6 @@
 #include <head.h>
 #include <mesh.h>
 #include <box.h>
-#include <stdio.h>
 #ifndef _WINDOW_
 #define _WINDOW_
 interface(Window){

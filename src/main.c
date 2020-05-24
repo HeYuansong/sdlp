@@ -1,5 +1,5 @@
 #include <main.h>
-int main(){
+int main(int argc,char*argv[]){
   Window * window = interface_window("c with object", 1280, 720);
   Mesh * meshes[2] = {
      interface_Box(interface_shader("shader/tri.vs","shader/tri.fs"),

@@ -1,19 +1,25 @@
 #include <shader.h>
-void catfile(char * path, char * text, ssize_t size){
-  int fd = open(path,O_RDONLY);
-  read(fd, text, size);
+int catfile(char * path, char * text, unsigned size){
+  FILE *p = fopen(path,"r");
+  fread(text,8,size,p);
   text[size] = '\0';
+  fclose(p);
+  return 0;
 }
 unsigned * interface_shader(char * vertex_path, char * fragment_path){
   struct stat ft;
   stat(vertex_path, &ft);
+
   char vertexText[ft.st_size + 1];
   catfile(vertex_path, vertexText, ft.st_size);
+
   stat(fragment_path,&ft);
   char fragmentText[ft.st_size + 1];
   catfile(fragment_path, fragmentText, ft.st_size);
+  
   const char * vertexShaderSource = vertexText;
   const char * fragmentShaderSource = fragmentText;
+
   int vertexShader = glCreateShader(GL_VERTEX_SHADER);
   glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
   glCompileShader(vertexShader);
