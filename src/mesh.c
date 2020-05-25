@@ -1,19 +1,17 @@
 #include <mesh.h>
-static void render(Mesh*mesh){
+def(static void, render,Mesh*mesh)
   unsigned int diffuseNr  = 0;
   unsigned int specularNr = 0;
   unsigned int normalNr   = 0;
   unsigned int heightNr   = 0;
-  for(unsigned i = 0; i < mesh->texture_array->textures_Size; i++){
+  times(mesh->texture_array->textures_Size)
     glActiveTexture(GL_TEXTURE0 + i);
     string number;
     printf("path:%s\n",mesh->texture_array->textures[i].path);
-    if(strcmp(mesh->texture_array->textures[i].type,"texture_diffuse") == 0){
+    if(strcmp(mesh->texture_array->textures[i].type,"texture_diffuse") == 0)
       sprintf(number,"material.texture_diffuse%d",diffuseNr++);
-    }
-    else if(strcmp(mesh->texture_array->textures[i].type,"texture_specular") == 0){
+    else if(strcmp(mesh->texture_array->textures[i].type,"texture_specular") == 0)
       sprintf(number,"material.texture_specular%d",specularNr++);
-    }
     else if(strcmp(mesh->texture_array->textures[i].type,"texture_normal") == 0)
       sprintf(number,"material.texture_normal%d",normalNr++);
     else if(strcmp(mesh->texture_array->textures[i].type,"texture_height") == 0)
@@ -21,14 +19,14 @@ static void render(Mesh*mesh){
     printf("number:%s\n",number);
     glUniform1i(glGetUniformLocation(*mesh->shader, number), i);
     glBindTexture(GL_TEXTURE_2D, mesh->texture_array->textures[i].id);
-  }
+  end
   glUseProgram(*mesh->shader);
   glBindVertexArray(mesh->VAO);
   glDrawElements(GL_TRIANGLES, mesh->index_array->indices_Size, GL_UNSIGNED_INT, 0);
   glBindVertexArray(0);
   glActiveTexture(GL_TEXTURE0);
-}
-Mesh * interface_Mesh(unsigned * shader, Vertex_array * va, Index_array * ia,Texture_array * ta){
+end
+def(Mesh * , interface_Mesh, unsigned * shader, Vertex_array * va, Index_array * ia,Texture_array * ta)
   Mesh * mesh =  (Mesh*)malloc(sizeof(Mesh));
   mesh->shader = shader;
   mesh->render = render;
@@ -55,4 +53,4 @@ Mesh * interface_Mesh(unsigned * shader, Vertex_array * va, Index_array * ia,Tex
   glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Bitangent));
   glBindVertexArray(0);
   return mesh;
-}
+end

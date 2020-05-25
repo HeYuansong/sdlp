@@ -1,5 +1,5 @@
-
-Mesh * interface_Box(unsigned * shader, float x, float y, float w, float h){
+#include <font.h>
+def(Mesh * , interface_Font ,unsigned * shader,char font, float x, float y, float w, float h)
   Vertex_array * va = (Vertex_array*)malloc(sizeof(Vertex_array));
   Vertex * vertices = (Vertex*)malloc(sizeof(Vertex)*4);
   setVec3(vertices[0].Position,x+w/2,y+h/2,0);
@@ -18,4 +18,4 @@ Mesh * interface_Box(unsigned * shader, float x, float y, float w, float h){
   ta->textures = NULL;
   ta->textures_Size = 0;
   return interface_Mesh(shader,va,ia,ta);
-}
+end

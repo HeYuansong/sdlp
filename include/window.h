@@ -3,7 +3,7 @@
 #include <box.h>
 #ifndef _WINDOW_
 #define _WINDOW_
-interface(Window){
+interface(Window)
   SDL_Window * instance;
   char exit_state;
   short frame;
@@ -12,6 +12,6 @@ interface(Window){
   void(*event)(Window*);
   void(*render)(Window*);
   void(*connect_Mesh)(Window*, Mesh**, unsigned);
-};
+ends
 Window * interface_window(char * name , int w, int h);
 #endif
