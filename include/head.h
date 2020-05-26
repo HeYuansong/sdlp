@@ -2,14 +2,8 @@
 #include <GL/glew.h>
 #include <stdio.h>
 #include <string.h>
-<<<<<<< HEAD
-
-#define interface(NAME) typedef struct NAME NAME;struct NAME
-=======
 #include <locale.h>
 #include <wchar.h>
-
-
 
 #define def(retp, name, args...)			\
   retp name(args){
@@ -33,4 +27,4 @@
 #define ends };
 
 #define interface(NAME) typedef struct NAME NAME;struct NAME{
->>>>>>> dev-linux
+
