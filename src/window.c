@@ -1,59 +1,57 @@
 #include <window.h>
-static void connect_Mesh(Window*window,Mesh ** meshes, unsigned mesh_count){
+
+def(static void, connect_Mesh, Window*window,Mesh ** meshes, unsigned mesh_count)
   Mesh ** mesh = (Mesh**)malloc(sizeof(Mesh**)*(window->mesh_count + mesh_count));
-  for(int i = 0;i<window->mesh_count;i++)
+  times(window->mesh_count)
     mesh[i] = window->mesh[i];
-  for(int i = window->mesh_count;i<window->mesh_count + mesh_count;i++)
+  end
+  fromto(window->mesh_count, window->mesh_count + mesh_count)
     mesh[i] = meshes[i - window->mesh_count];
+  end
   if(window->mesh_count != 0)
     free(window->mesh);
   window->mesh_count = window->mesh_count + mesh_count;
   window->mesh = mesh;
-}
-static void render(Window * window){
+end
+
+def(static void, render , Window * window)
   window->exit_state = 1;
-  while(window->exit_state){
+  when(window->exit_state)
     window->event(window);
     glClear( GL_COLOR_BUFFER_BIT );
     glClearColor(1.0, 1.0, 1.0, 1.0);
-    for(int i = 0;i < window->mesh_count;i++){
+    times(window->mesh_count)
       Mesh * mesh = window->mesh[i];
       mesh->render(mesh);
-    }
+    end
     SDL_GL_SwapWindow(window->instance);
     SDL_Delay(1000/window->frame);
-  }
+  end
   SDL_DestroyWindow(window->instance);
   SDL_Quit();
-}
-static void event(Window * window){
+end
+
+def(static void, event ,Window * window)
   SDL_Event event;
-  while(SDL_PollEvent(&event)){
-    switch(event.type){
-    case SDL_WINDOWEVENT_CLOSE:{
-      if(window->instance){
-	SDL_DestroyWindow(window->instance);
-	window->instance = NULL;
-      }
-      break;
-    }
-    case SDL_KEYDOWN:{
-      switch(event.key.keysym.sym){
-      case SDLK_ESCAPE:{
-	window->exit_state = 0;
-	break;
-      }
-      }
-      break;
-    }
-    case SDL_QUIT:{
+  when(SDL_PollEvent(&event))
+    cond(event.type == SDL_WINDOWEVENT_CLOSE)
+      cond(window->instance)
+        SDL_DestroyWindow(window->instance);
+        window->instance = NULL;
+      end
+    end
+    cond(event.type == SDL_KEYDOWN)
+      cond(event.key.keysym.sym == SDLK_ESCAPE)
+        window->exit_state = 0;
+      end
+    end
+    esif(event.type == SDL_QUIT)
       window->exit_state = 0;
-      break;
-    }
-    }
-  }
-}
-Window * interface_window(char * name, int w, int h){
+    end
+  end
+end
+
+def(Window * , interface_window ,char * name, int w, int h)
   SDL_Init(SDL_INIT_VIDEO);
   SDL_GL_SetAttribute( SDL_GL_CONTEXT_MAJOR_VERSION, 3 );
   SDL_GL_SetAttribute( SDL_GL_CONTEXT_MINOR_VERSION, 3 );
@@ -74,6 +72,9 @@ Window * interface_window(char * name, int w, int h){
   if( SDL_GL_SetSwapInterval( 1 ) < 0 )			
     printf( "Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError() );
   glViewport(0, 0, w, h);
+
+  setlocale(LC_ALL, "");
+
   Window * window = (Window*)malloc(sizeof(Window));
   window->instance = sdlWindow;
   window->event = event;
@@ -82,4 +83,4 @@ Window * interface_window(char * name, int w, int h){
   window->frame = 120;
   window->mesh_count = 0;
   return window;
-}
+end

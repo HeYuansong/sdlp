@@ -1,12 +1,12 @@
 #include <shader.h>
-int catfile(char * path, char * text, unsigned size){
+def(int , catfile , char * path, char * text, unsigned size)
   FILE *p = fopen(path,"r");
   fread(text,8,size,p);
   text[size] = '\0';
   fclose(p);
   return 0;
-}
-unsigned * interface_shader(char * vertex_path, char * fragment_path){
+end
+def(unsigned * , interface_shader , char * vertex_path, char * fragment_path)
   struct stat ft;
   stat(vertex_path, &ft);
 
@@ -27,21 +27,20 @@ unsigned * interface_shader(char * vertex_path, char * fragment_path){
   int success;
   char infoLog[512];
   glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-  if (!success){
+  cond(!success)
     glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
     printf("ERROR::SHADER::VERTEX::COMPILATION_FAILED\n%s\n",infoLog);
-  }
+  end
   // 片段着色器
   int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
   glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
   glCompileShader(fragmentShader);
   // 检查编译错误
   glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-  if (!success)
-    {
+  cond(!success)
       glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
       printf("ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n%s\n",infoLog);
-    }
+  end
   // 把着色器链接起来
   unsigned * shaderProgram = (unsigned *)malloc(sizeof(int));
   *shaderProgram = glCreateProgram();
@@ -50,11 +49,11 @@ unsigned * interface_shader(char * vertex_path, char * fragment_path){
   glLinkProgram(*shaderProgram);
   // 检查链接错误
   glGetProgramiv(*shaderProgram, GL_LINK_STATUS, &success);
-  if (!success) {
+  cond (!success)
     glGetProgramInfoLog(*shaderProgram, 512, NULL, infoLog);
     printf("ERROR::SHADER::PROGRAM::LINKING_FAILED\n%s\n",infoLog);
-  }
+  end
   glDeleteShader(vertexShader);
   glDeleteShader(fragmentShader);
   return shaderProgram;
-}
+end

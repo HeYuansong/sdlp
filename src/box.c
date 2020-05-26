@@ -1,11 +1,12 @@
 #include <box.h>
 
-static void setVec3(vec3 vector,float x,float y,float z){
+def(static void ,setVec3,vec3 vector,float x,float y,float z)
   vector[0] = x;
   vector[1] = y;
   vector[2] = z;
-}
-Mesh * interface_Box(unsigned * shader, float x, float y, float w, float h){
+end
+
+def(Mesh *, interface_Box ,unsigned * shader, float x, float y, float w, float h)
   Vertex_array * va = (Vertex_array*)malloc(sizeof(Vertex_array));
   Vertex * vertices = (Vertex*)malloc(sizeof(Vertex)*4);
   setVec3(vertices[0].Position,x+w/2,y+h/2,0);
@@ -24,4 +25,4 @@ Mesh * interface_Box(unsigned * shader, float x, float y, float w, float h){
   ta->textures = NULL;
   ta->textures_Size = 0;
   return interface_Mesh(shader,va,ia,ta);
-}
+end
