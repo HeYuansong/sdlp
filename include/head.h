@@ -24,5 +24,8 @@
 #define deft\
   else{
 
+#define body {
+#define end }
 #define ends };
+
 #define interface(NAME) typedef struct NAME NAME;struct NAME{

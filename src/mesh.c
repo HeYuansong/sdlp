@@ -4,6 +4,7 @@ def(static void, render,Mesh*mesh)
   unsigned int specularNr = 0;
   unsigned int normalNr   = 0;
   unsigned int heightNr   = 0;
+  glDisable(GL_BLEND);
   times(mesh->texture_array->textures_Size)
     glActiveTexture(GL_TEXTURE0 + i);
     string number;
@@ -15,8 +16,12 @@ def(static void, render,Mesh*mesh)
       sprintf(number,"material.texture_normal%d",normalNr++);
     else if(strcmp(mesh->texture_array->textures[i].type,"texture_height") == 0)
       sprintf(number,"material.texture_height%d",heightNr++);
-    else if(strcmp(mesh->texture_array->textures[i].type,"texture_text") == 0)
+    esif(strcmp(mesh->texture_array->textures[i].type,"texture_text") == 0)
       sprintf(number,"text");
+      
+      glEnable(GL_BLEND);
+      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    end
     glUniform1i(glGetUniformLocation(*mesh->shader, number), i);
     glBindTexture(GL_TEXTURE_2D, mesh->texture_array->textures[i].id);
   end

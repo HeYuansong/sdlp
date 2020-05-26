@@ -1,4 +1,4 @@
-CC = cc
+CC = gcc
 CFLAGS = -g -Wall
 TARGET = ../build/app
 SRCS =  main.c  \
@@ -18,10 +18,7 @@ LIBS = -L$(LIBSDIR)/GLEW/lib -lGLEW \
        -L$(LIBSDIR)/SDL2/lib -lSDL2 \
        -L$(LIBSDIR)/FREETYPE/lib -lfreetype \
        -lGL
-LDCONFIG = -Wl, \
-       -rpath=$(LIBSDIR)/GLEW/lib, \
-       -rpath=$(LIBSDIR)/SDL2/lib, \
-       -rpath=$(LIBSDIR)/FREETYPE/lib
+LDCONFIG = -Wl,-rpath=$(LIBSDIR)/GLEW/lib:$(LIBSDIR)/SDL2/lib:$(LIBSDIR)/FREETYPE/lib
 $(TARGET):$(OBJS)
 	$(CC) $(CFLAGS) $(LDCONFIG) $(OBJS) -o $(TARGET) $(LIBS)
 %.o:%.c  

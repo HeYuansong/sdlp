@@ -73,9 +73,6 @@ def(Window * , interface_window ,char * name, int w, int h)
     printf( "Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError() );
   glViewport(0, 0, w, h);
 
-  glEnable(GL_CULL_FACE);
-  glEnable(GL_BLEND);
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   setlocale(LC_ALL, "");
 
   Window * window = (Window*)malloc(sizeof(Window));

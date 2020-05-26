@@ -13,12 +13,20 @@ end
 
 def(Mesh * , interface_Font ,unsigned * shader , wchar_t font, float x, float y, float scale, vec3 color)
 
+glEnable(GL_BLEND);
+glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 interface(Character)
   GLuint TextureID;
   int Size[2];
   int Bearing[2];
   GLuint Advance;
 ends
+
+mat4x4 projection;
+glUseProgram(*shader);
+mat4x4_ortho(projection, 0, 1280, 0, 720, 0, 100);
+glUniformMatrix4fv(glGetUniformLocation(*shader, "projection"), 1, GL_FALSE, &projection[0][0]);
 
 FT_Library ft;
 if (FT_Init_FreeType(&ft))
@@ -29,14 +37,12 @@ if (FT_New_Face(ft, "fonts/FZXKTJW.TTF", 0, &face))
 FT_Set_Pixel_Sizes(face, 0, 48);
 glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-cond(FT_Load_Char(face, font, FT_LOAD_RENDER))
+if(FT_Load_Char(face, font, FT_LOAD_RENDER))
   printf("ERROR::FREETYTPE: Failed to load Glyph");
-  continue;
-end
 
-GLuint texture;
-glGenTextures(1, &texture);
-glBindTexture(GL_TEXTURE_2D, texture);
+GLuint * texture = (GLuint*)malloc(sizeof(GLuint));
+glGenTextures(1, texture);
+glBindTexture(GL_TEXTURE_2D, *texture);
 glTexImage2D(
 	     GL_TEXTURE_2D,
 	     0,
@@ -54,7 +60,7 @@ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 Character ch = body
-  texture,
+  *texture,
   body
     face->glyph->bitmap.width,
     face->glyph->bitmap.rows
@@ -69,8 +75,8 @@ ends
 FT_Done_Face(face);
 FT_Done_FreeType(ft);
 
-glUseProgram(shader);
-glUniform3f(glGetUniformLocation(shader, "textColor"), color[0], color[1], color[2]);
+glUseProgram(*shader);
+glUniform3f(glGetUniformLocation(*shader, "textColor"), color[0], color[1], color[2]);
 GLfloat xpos = x + ch.Bearing[0] * scale;
 GLfloat ypos = y - (ch.Size[1] - ch.Bearing[1]) * scale;
 GLfloat w = ch.Size[0] * scale;
@@ -110,8 +116,8 @@ Texture_array * ta = (Texture_array*)malloc(sizeof(Texture_array));
 
 Texture * textures = (Texture*)malloc(sizeof(Texture));
 
-textures[0].id = texture;
-textures[0].path = NULL;
+textures[0].id = *texture;
+
 sprintf(textures[0].type,"texture_text");
 
 ta->textures = textures;
