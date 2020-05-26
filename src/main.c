@@ -2,7 +2,7 @@
 
 def(int, main, int argc, char ** argv)
   Window * window = interface_window("c with object", 1280, 720);
-  Mesh * meshes[2] = body
+  Mesh * meshes[2] = body(
      interface_Box(
      interface_shader(
      "shader/tri.vs",
@@ -13,13 +13,21 @@ def(int, main, int argc, char ** argv)
      "shader/tri.vs",
      "shader/tri.fs"),
      0.75,0.75,0.5,0.5)
-  ends
+  );
   Mesh * meshes2[1] = body
-     interface_Box(
+     interface_Font(
      interface_shader(
-     "shader/tri.vs",
-     "shader/tri.fs"),
-     -0.75,-0.75,0.5,0.5)
+     "shader/font.vs",
+     "shader/font.fs"),
+     L'嗨',
+     100,
+     100,
+     20,
+     body
+     0.0,
+     0.0,
+     0.0
+     end)
   ends
   window->connect_Mesh(window, meshes, 2);
   window->connect_Mesh(window, meshes2, 1);

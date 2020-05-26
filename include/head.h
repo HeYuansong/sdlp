@@ -2,9 +2,10 @@
 #include <GL/glew.h>
 #include <stdio.h>
 #include <string.h>
+#include <locale.h>
+#include <wchar.h>
 
-#define body {
-#define end }
+
 
 #define def(retp, name, args...)			\
   retp name(args){

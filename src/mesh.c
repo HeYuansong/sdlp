@@ -7,7 +7,6 @@ def(static void, render,Mesh*mesh)
   times(mesh->texture_array->textures_Size)
     glActiveTexture(GL_TEXTURE0 + i);
     string number;
-    printf("path:%s\n",mesh->texture_array->textures[i].path);
     if(strcmp(mesh->texture_array->textures[i].type,"texture_diffuse") == 0)
       sprintf(number,"material.texture_diffuse%d",diffuseNr++);
     else if(strcmp(mesh->texture_array->textures[i].type,"texture_specular") == 0)
@@ -16,7 +15,8 @@ def(static void, render,Mesh*mesh)
       sprintf(number,"material.texture_normal%d",normalNr++);
     else if(strcmp(mesh->texture_array->textures[i].type,"texture_height") == 0)
       sprintf(number,"material.texture_height%d",heightNr++);
-    printf("number:%s\n",number);
+    else if(strcmp(mesh->texture_array->textures[i].type,"texture_text") == 0)
+      sprintf(number,"text");
     glUniform1i(glGetUniformLocation(*mesh->shader, number), i);
     glBindTexture(GL_TEXTURE_2D, mesh->texture_array->textures[i].id);
   end
