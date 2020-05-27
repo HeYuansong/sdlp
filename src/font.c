@@ -11,7 +11,7 @@ def(static void,setVec2,vec3 vector,float x,float y)
   vector[1] = y;
 end
 
-def(Mesh * , interface_Font ,unsigned * shader , wchar_t font, float x, float y, float scale, vec3 color)
+def(Mesh * , interface_Font ,unsigned * shader , wchar_t font, float x, float y, float size, vec3 color)
 
 glEnable(GL_BLEND);
 glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -34,7 +34,7 @@ if (FT_Init_FreeType(&ft))
 FT_Face face;
 if (FT_New_Face(ft, "fonts/FZXKTJW.TTF", 0, &face))
   printf("ERROR::FREETYPE: Failed to load font");
-FT_Set_Pixel_Sizes(face, 0, 48);
+FT_Set_Pixel_Sizes(face, 0, size);
 glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
 if(FT_Load_Char(face, font, FT_LOAD_RENDER))
@@ -77,10 +77,10 @@ FT_Done_FreeType(ft);
 
 glUseProgram(*shader);
 glUniform3f(glGetUniformLocation(*shader, "textColor"), color[0], color[1], color[2]);
-GLfloat xpos = x + ch.Bearing[0] * scale;
-GLfloat ypos = y - (ch.Size[1] - ch.Bearing[1]) * scale;
-GLfloat w = ch.Size[0] * scale;
-GLfloat h = ch.Size[1] * scale;
+GLfloat xpos = x + ch.Bearing[0] ;
+GLfloat ypos = y - (ch.Size[1] - ch.Bearing[1]);
+GLfloat w = ch.Size[0] ;
+GLfloat h = ch.Size[1] ;
 
 Vertex_array * va = (Vertex_array*)malloc(sizeof(Vertex_array));
 Vertex * vertices = (Vertex*)malloc(sizeof(Vertex)*4);

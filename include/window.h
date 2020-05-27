@@ -1,5 +1,7 @@
 #include <head.h>
 #include <mesh.h>
+#include <font.h>
+#include <shader.h>
 #ifndef _WINDOW_
 #define _WINDOW_
 interface(Window)

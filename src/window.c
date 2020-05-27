@@ -1,4 +1,22 @@
 #include <window.h>
+static def(void,createText,wchar_t * s,int line,int size,Window*window)
+  unsigned length = 0;
+  when(1)
+    if(s[length] == L'\0')
+      break;
+    length++;
+  end
+  Mesh ** meshes = (Mesh**)malloc(sizeof(Mesh*)*length);
+  vec3 color = body
+    0.0,0.0,0.0
+  ends
+  times(length)
+    meshes[i] = interface_Font(
+       interface_shader("shader/font.vs","shader/font.fs"),
+       s[i],size * i,720 - size * line, size, color);
+  end
+  window->connect_Mesh(window, meshes, length);
+end
 
 def(static void, connect_Mesh, Window*window,Mesh ** meshes, unsigned mesh_count)
   Mesh ** mesh = (Mesh**)malloc(sizeof(Mesh**)*(window->mesh_count + mesh_count));
@@ -44,6 +62,13 @@ def(static void, event ,Window * window)
       cond(event.key.keysym.sym == SDLK_ESCAPE)
         window->exit_state = 0;
       end
+    end
+    esif(event.type == SDL_TEXTINPUT)
+	wprintf(L"%s\n",event.text.text);
+        wchar_t s[1024];
+        swprintf(s, 1024,
+		    L"%s", event.text.text);
+        createText(s,3,48,window);
     end
     esif(event.type == SDL_QUIT)
       window->exit_state = 0;
