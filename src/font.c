@@ -40,9 +40,9 @@ glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 if(FT_Load_Char(face, font, FT_LOAD_RENDER))
   printf("ERROR::FREETYTPE: Failed to load Glyph");
 
-GLuint * texture = (GLuint*)malloc(sizeof(GLuint));
-glGenTextures(1, texture);
-glBindTexture(GL_TEXTURE_2D, *texture);
+GLuint texture;
+glGenTextures(1, &texture);
+glBindTexture(GL_TEXTURE_2D, texture);
 glTexImage2D(
 	     GL_TEXTURE_2D,
 	     0,
@@ -60,7 +60,7 @@ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 Character ch = body
-  *texture,
+  texture,
   body
     face->glyph->bitmap.width,
     face->glyph->bitmap.rows
@@ -116,7 +116,7 @@ Texture_array * ta = (Texture_array*)malloc(sizeof(Texture_array));
 
 Texture * textures = (Texture*)malloc(sizeof(Texture));
 
-textures[0].id = *texture;
+textures[0].id = texture;
 
 sprintf(textures[0].type,"texture_text");
 

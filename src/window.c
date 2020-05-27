@@ -1,5 +1,5 @@
 #include <window.h>
-static def(void,createText,wchar_t * s,int line,int size,Window*window)
+def(static void,createText,wchar_t * s,int line,int size,Window*window)
   unsigned length = 0;
   when(1)
     if(s[length] == L'\0')
@@ -18,6 +18,26 @@ static def(void,createText,wchar_t * s,int line,int size,Window*window)
   window->connect_Mesh(window, meshes, length);
 end
 
+static def(void,wfree,Window*window)
+    times(window->mesh_count)
+      free(window->mesh[i]->shader);
+      free(window->mesh[i]->vertex_array->vertices);
+      free(window->mesh[i]->vertex_array);
+
+      free(window->mesh[i]->index_array->indices);
+      free(window->mesh[i]->index_array);
+
+      free(window->mesh[i]->texture_array->textures);
+      free(window->mesh[i]->texture_array);
+
+      free(window->mesh[i]);
+    end
+    free(window->mesh);
+    SDL_DestroyWindow(window->instance);
+    free(window);
+    SDL_Quit();
+end
+  
 def(static void, connect_Mesh, Window*window,Mesh ** meshes, unsigned mesh_count)
   Mesh ** mesh = (Mesh**)malloc(sizeof(Mesh**)*(window->mesh_count + mesh_count));
   times(window->mesh_count)
@@ -26,8 +46,11 @@ def(static void, connect_Mesh, Window*window,Mesh ** meshes, unsigned mesh_count
   fromto(window->mesh_count, window->mesh_count + mesh_count)
     mesh[i] = meshes[i - window->mesh_count];
   end
-  if(window->mesh_count != 0)
+  free(meshes);
+  if(window->mesh_count != 0) body
     free(window->mesh);
+    window->mesh = NULL;
+  end
   window->mesh_count = window->mesh_count + mesh_count;
   window->mesh = mesh;
 end
@@ -45,8 +68,7 @@ def(static void, render , Window * window)
     SDL_GL_SwapWindow(window->instance);
     SDL_Delay(1000/window->frame);
   end
-  SDL_DestroyWindow(window->instance);
-  SDL_Quit();
+  window->free(window);
 end
 
 def(static void, event ,Window * window)
@@ -64,10 +86,8 @@ def(static void, event ,Window * window)
       end
     end
     esif(event.type == SDL_TEXTINPUT)
-	wprintf(L"%s\n",event.text.text);
         wchar_t s[1024];
-        swprintf(s, 1024,
-		    L"%s", event.text.text);
+        swprintf(s, 1024, L"%s", event.text.text);
         createText(s,3,48,window);
     end
     esif(event.type == SDL_QUIT)
@@ -107,5 +127,6 @@ def(Window * , interface_window ,char * name, int w, int h)
   window->connect_Mesh = connect_Mesh;
   window->frame = 120;
   window->mesh_count = 0;
+  window->free = wfree;
   return window;
 end

@@ -13,6 +13,7 @@ interface(Window)
   void(*event)(Window*);
   void(*render)(Window*);
   void(*connect_Mesh)(Window*, Mesh**, unsigned);
+  void(*free)(Window*);
 ends
 Window * interface_window(char * name , int w, int h);
 #endif

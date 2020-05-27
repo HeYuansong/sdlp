@@ -18,7 +18,6 @@ def(static void, render,Mesh*mesh)
       sprintf(number,"material.texture_height%d",heightNr++);
     esif(strcmp(mesh->texture_array->textures[i].type,"texture_text") == 0)
       sprintf(number,"text");
-      
       glEnable(GL_BLEND);
       glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     end
