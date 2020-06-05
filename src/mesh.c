@@ -1,4 +1,7 @@
 #include <mesh.h>
+void(*get_render(Mesh * mesh))(Mesh*){
+  return mesh->render;
+}
 def(static void, render,Mesh*mesh)
   unsigned int diffuseNr  = 0;
   unsigned int specularNr = 0;

@@ -21,6 +21,8 @@ end
 static def(void,wfree,Window*window)
     times(window->mesh_count)
       free(window->mesh[i]->shader);
+      window->mesh[i]->shader = NULL;
+
       free(window->mesh[i]->vertex_array->vertices);
       free(window->mesh[i]->vertex_array);
 
@@ -32,7 +34,8 @@ static def(void,wfree,Window*window)
 
       free(window->mesh[i]);
     end
-    free(window->mesh);
+    if(window->mesh_count != 0)
+      free(window->mesh);
     SDL_DestroyWindow(window->instance);
     free(window);
     SDL_Quit();
@@ -47,7 +50,7 @@ def(static void, connect_Mesh, Window*window,Mesh ** meshes, unsigned mesh_count
     mesh[i] = meshes[i - window->mesh_count];
   end
   free(meshes);
-  if(window->mesh_count != 0) body
+  cond(window->mesh_count != 0) 
     free(window->mesh);
     window->mesh = NULL;
   end
@@ -57,13 +60,16 @@ end
 
 def(static void, render , Window * window)
   window->exit_state = 1;
+  createText(L"你好世界",2,48,window);
   when(window->exit_state)
     window->event(window);
     glClear( GL_COLOR_BUFFER_BIT );
     glClearColor(1.0, 1.0, 1.0, 1.0);
     times(window->mesh_count)
       Mesh * mesh = window->mesh[i];
-      mesh->render(mesh);
+      void(*render)(Mesh*);
+      render = get_render(mesh);
+      render(mesh);
     end
     SDL_GL_SwapWindow(window->instance);
     SDL_Delay(1000/window->frame);
@@ -74,12 +80,6 @@ end
 def(static void, event ,Window * window)
   SDL_Event event;
   when(SDL_PollEvent(&event))
-    cond(event.type == SDL_WINDOWEVENT_CLOSE)
-      cond(window->instance)
-        SDL_DestroyWindow(window->instance);
-        window->instance = NULL;
-      end
-    end
     cond(event.type == SDL_KEYDOWN)
       cond(event.key.keysym.sym == SDLK_ESCAPE)
         window->exit_state = 0;
@@ -88,7 +88,7 @@ def(static void, event ,Window * window)
     esif(event.type == SDL_TEXTINPUT)
         wchar_t s[1024];
         swprintf(s, 1024, L"%s", event.text.text);
-        createText(s,3,48,window);
+        createText(s,1,48,window);
     end
     esif(event.type == SDL_QUIT)
       window->exit_state = 0;
@@ -100,7 +100,8 @@ def(Window * , interface_window ,char * name, int w, int h)
   SDL_Init(SDL_INIT_VIDEO);
   SDL_GL_SetAttribute( SDL_GL_CONTEXT_MAJOR_VERSION, 3 );
   SDL_GL_SetAttribute( SDL_GL_CONTEXT_MINOR_VERSION, 3 );
-  SDL_GL_SetAttribute( SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE );
+  SDL_GL_SetAttribute( SDL_GL_CONTEXT_PROFILE_MASK,
+		       SDL_GL_CONTEXT_PROFILE_CORE );
   SDL_Window * sdlWindow = SDL_CreateWindow( name,
 					     SDL_WINDOWPOS_UNDEFINED,
 					     SDL_WINDOWPOS_UNDEFINED,
@@ -113,9 +114,11 @@ def(Window * , interface_window ,char * name, int w, int h)
   glewExperimental = GL_TRUE;
   GLenum glewError = glewInit();
   if( glewError != GLEW_OK )
-    printf( "Error initializing GLEW! %s\n", glewGetErrorString( glewError ) );
+    printf( "Error initializing GLEW! %s\n",
+	    glewGetErrorString( glewError ) );
   if( SDL_GL_SetSwapInterval( 1 ) < 0 )			
-    printf( "Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError() );
+    printf( "Warning: Unable to set VSync! SDL Error: %s\n",
+	    SDL_GetError() );
   glViewport(0, 0, w, h);
 
   setlocale(LC_ALL, "");

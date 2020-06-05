@@ -36,6 +36,7 @@ interface(Texture_array)
   unsigned textures_Size;
 ends
 
+
 interface(Mesh)
   unsigned * shader;
   Vertex_array * vertex_array;
@@ -45,4 +46,5 @@ interface(Mesh)
   void(*render)(Mesh*);
 ends
 Mesh * interface_Mesh(unsigned * shader, Vertex_array * va, Index_array * ia,Texture_array * ta);
+void(*get_render(Mesh * mesh))(Mesh*);
 #endif

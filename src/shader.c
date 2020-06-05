@@ -1,5 +1,5 @@
 #include <shader.h>
-def(int , catfile , char * path, char * text, unsigned size)
+def(static int , catfile , char * path, char * text, unsigned size)
   FILE *p = fopen(path,"r");
   fread(text,8,size,p);
   text[size] = '\0';

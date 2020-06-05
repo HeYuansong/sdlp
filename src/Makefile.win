@@ -1,7 +1,9 @@
 CC = gcc
 LIBSDIR = ../libs/windows
 CFLAGS = -g -Wall -mwindows
-INC = -I ../include -I $(LIBSDIR)/SDL2/include -I $(LIBSDIR)/GLEW/include
+INC = -I ../include \
+      -I $(LIBSDIR)/SDL2/include \
+      -I $(LIBSDIR)/GLEW/include
 
 TARGET = ../build/app.exe
 SRCS =  main.c  \
@@ -10,7 +12,9 @@ SRCS =  main.c  \
 	shader.c\
 	box.c
 OBJS = $(SRCS:.c=.o)
-LIBS = -L $(LIBSDIR)/SDL2/lib -L $(LIBSDIR)/GLEW/lib/Release/x64 -lSDL2main -lSDL2 -lopengl32 -lglew32 -lmingw32
+LIBS = -L $(LIBSDIR)/SDL2/lib \
+       -L $(LIBSDIR)/GLEW/lib/Release/x64 \
+       -lSDL2main -lSDL2 -lopengl32 -lglew32 -lmingw32
 $(TARGET):$(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $(TARGET) $(LIBS)
 %.o:%.c

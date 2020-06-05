@@ -5,7 +5,7 @@ SRCS =  main.c  \
 	window.c\
 	mesh.c  \
 	shader.c\
-	box.c\
+	box.c   \
 	font.c
 OBJS = $(SRCS:.c=.o)
 

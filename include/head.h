@@ -4,12 +4,9 @@
 #include <string.h>
 #include <locale.h>
 #include <wchar.h>
-
-
-
-#define def(retp, name, args...)			\
+#define def(retp, name, args...)\
   retp name(args){
-#define times(number)			\
+#define times(number)\
   for(int i=0;i<number;i++){
 #define fromto(from,to)\
   for(int i=from;i<to;i++){
@@ -23,9 +20,7 @@
   else if(condi){
 #define deft\
   else{
-
 #define body {
 #define end }
 #define ends };
-
 #define interface(NAME) typedef struct NAME NAME;struct NAME{
